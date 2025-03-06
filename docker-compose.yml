@@ -1,5 +1,4 @@
 services:
-
   flask:
     container_name: flask
     image: vadims06/topolograph:latest
@@ -16,18 +15,17 @@ services:
       NAPALM_PASSWORD: $NAPALM_PASSWORD
       NAPALM_PORT: $NAPALM_PORT
       DNS: $DNS
-      NETBOX_URL: $NETBOX_URL # http://localhost:8000
-      NETBOX_RO_TOKEN : $NETBOX_RO_TOKEN
+      NETBOX_URL: $NETBOX_URL
+      NETBOX_RO_TOKEN: $NETBOX_RO_TOKEN
       TOPOLOGRAPH_WEB_API_USERNAME_EMAIL: $TOPOLOGRAPH_WEB_API_USERNAME_EMAIL
       TOPOLOGRAPH_WEB_API_PASSWORD: $TOPOLOGRAPH_WEB_API_PASSWORD
       TOPOLOGRAPH_WEB_API_AUTHORISED_NETWORKS: $TOPOLOGRAPH_WEB_API_AUTHORISED_NETWORKS
-      SWAGGER_HOST: 'localhost:$TOPOLOGRAPH_PORT'
+      SWAGGER_HOST: "localhost:$TOPOLOGRAPH_PORT"
     depends_on:
       - mongodb
     networks:
       - frontend
       - backend
-
   mongodb:
     image: mongo:4.0.8
     container_name: mongodb
@@ -43,12 +41,11 @@ services:
       - mongodbdata:/data/db
     networks:
       - backend
-
   webserver:
     image: nginx:latest
     container_name: webserver
     restart: unless-stopped
-    command:  ["nginx", "-g", "daemon off;"]
+    command: ["nginx", "-g", "daemon off;"]
     environment:
       NGINX_PORT: 8079
     ports:
@@ -64,14 +61,12 @@ services:
       - flask
     networks:
       - frontend
-
 networks:
   frontend:
     driver: bridge
   backend:
     name: topolograph_backend
     driver: bridge
-
 volumes:
   mongodbdata:
     driver: local
