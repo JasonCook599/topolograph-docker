@@ -1,6 +1,7 @@
+# Service specific names
 services:
   flask:
-    container_name: flask
+    container_name: topolograph_flask
     image: vadims06/topolograph:latest
     restart: unless-stopped
     environment:
@@ -29,7 +30,7 @@ services:
       - backend
   mongodb:
     image: mongo:4.0.8
-    container_name: mongodb
+    container_name: topolograph_mongodb
     restart: unless-stopped
     command: mongod --auth
     environment:
