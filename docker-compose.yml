@@ -21,10 +21,11 @@ services:
       TOPOLOGRAPH_WEB_API_PASSWORD: $TOPOLOGRAPH_WEB_API_PASSWORD
       TOPOLOGRAPH_WEB_API_AUTHORISED_NETWORKS: $TOPOLOGRAPH_WEB_API_AUTHORISED_NETWORKS
       SWAGGER_HOST: "localhost:$TOPOLOGRAPH_PORT"
+    ports:
+      - "$TOPOLOGRAPH_PORT:5000"
     depends_on:
       - mongodb
     networks:
-      - frontend
       - backend
   mongodb:
     image: mongo:4.0.8
@@ -41,34 +42,10 @@ services:
       - mongodbdata:/data/db
     networks:
       - backend
-  webserver:
-    image: nginx:latest
-    container_name: webserver
-    restart: unless-stopped
-    command: ["nginx", "-g", "daemon off;"]
-    environment:
-      NGINX_PORT: 8079
-    ports:
-      - "$TOPOLOGRAPH_PORT:8079"
-    volumes:
-      - type: volume
-        source: nginxdata
-        target: /var/log/nginx
-      - type: bind
-        source: ./webserver/templates/app.conf.template
-        target: /etc/nginx/templates/app.conf.template
-    depends_on:
-      - flask
-    networks:
-      - frontend
 networks:
-  frontend:
-    driver: bridge
   backend:
     name: topolograph_backend
     driver: bridge
 volumes:
   mongodbdata:
-    driver: local
-  nginxdata:
     driver: local
